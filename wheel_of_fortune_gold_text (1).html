@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>عجلة الحظ - معرض بيت العروسة</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #000; /* خلفية سوداء */
+            color: white;
+            direction: rtl;
+        }
+        h1 {
+            color: #ffcc00;
+        }
+        .wheel-container {
+            position: relative;
+            margin: 20px auto;
+            width: 300px;
+            height: 300px;
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+        .gold-text {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: gold;
+            text-shadow: 2px 2px 4px rgba(255, 215, 0, 0.7);
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .spin-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            color: white;
+            background-color: #d81b60;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffcc00;
+        }
+        .subscribe-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>معرض بيت العروسة يرحب بكم</h1>
+    <div class="wheel-container">
+        <canvas id="wheelCanvas"></canvas>
+    </div>
+    <div class="gold-text">Center بيت العروسة Homeware</div>
+    <button class="spin-button" onclick="spinWheel()">لف العجلة</button>
+    <div class="result" id="resultText"></div>
+    <button class="subscribe-button" id="subscribeButton" onclick="subscribe()">اشترك في قناتنا</button>
+
+    <script>
+        const options = ["حظ أوفر", "خصم 30%", "قسيمة 200 جنيه", "خصم 10%", "خصم 10%", "خصم 5%", "خصم 5%", "حظ أوفر"];
+        let spinning = false;
+
+        function drawWheel() {
+            const canvas = document.getElementById("wheelCanvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = 300;
+            canvas.height = 300;
+            const radius = canvas.width / 2;
+            const angle = (2 * Math.PI) / options.length;
+
+            for (let i = 0; i < options.length; i++) {
+                ctx.beginPath();
+                ctx.moveTo(radius, radius);
+                ctx.arc(radius, radius, radius, i * angle, (i + 1) * angle);
+                ctx.fillStyle = i % 2 === 0 ? "#ffcc00" : "#ff5733";
+                ctx.fill();
+                ctx.stroke();
+                ctx.fillStyle = "black";
+                ctx.font = "14px Arial";
+                ctx.fillText(options[i], radius + Math.cos(i * angle + angle / 2) * (radius / 1.5), 
+                            radius + Math.sin(i * angle + angle / 2) * (radius / 1.5));
+            }
+        }
+
+        function spinWheel() {
+            if (spinning) return;
+            spinning = true;
+            const resultIndex = Math.floor(Math.random() * options.length);
+            document.getElementById("resultText").innerText = "جاري الدوران...";
+            setTimeout(() => {
+                document.getElementById("resultText").innerText = "مبروك! لقد حصلت على: " + options[resultIndex];
+                document.getElementById("subscribeButton").style.display = "block";
+                spinning = false;
+            }, 3000);
+        }
+
+        function subscribe() {
+            window.open("https://www.youtube.com/", "_blank");
+        }
+
+        drawWheel();
+    </script>
+</body>
+</html>
